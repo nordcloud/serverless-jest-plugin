@@ -11,8 +11,8 @@ const replaceTextInFile = (filePath, subString, newSubString) => {
 };
 
 const getTmpDirPath = () => path.join(os.tmpdir(),
-  'tmpdirs-serverless-mocha-plugin',
-  'serverless-mocha-plugin',
+  'tmpdirs-serverless-jest-plugin',
+  'serverless-jest-plugin',
   crypto.randomBytes(8).toString('hex'));
 
 module.exports = {

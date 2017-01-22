@@ -2,12 +2,12 @@
 
 const path = require('path');
 const fse = require('fs-extra');
-const utils = require('../utils.js');
-const testUtils = require('./testUtils');
+const utils = require('../lib/utils.js');
+const testUtils = require('../__tests__/test-utils');
 
 describe('utils', () => {
   beforeAll(() => {
-    process.env.MOCHA_PLUGIN_TEST_DIR = path.join(__dirname);
+    process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmp = testUtils.getTmpDirPath();
     fse.mkdirsSync(tmp);
     process.chdir(tmp);
@@ -35,7 +35,7 @@ describe('utils', () => {
 
   it('gets template from a file', () => {
     const templatePath =
-      path.join(process.env.MOCHA_PLUGIN_TEST_DIR, '../', 'templates/test-template.ejs');
+      path.join(process.env.PLUGIN_TEST_DIR, '../', 'lib', 'templates', 'test-template.ejs');
     const expectedTemplate = fse.readFileSync(templatePath, 'utf-8');
     const template = utils.getTemplateFromFile(templatePath);
     expect(template).toBe(expectedTemplate);

@@ -2,9 +2,9 @@
 
 const BbPromise = require('bluebird');
 
-const createFunction = require('./create-function');
-const createTest = require('./create-test');
-const runTests = require('./run-tests');
+const createFunction = require('./lib/create-function');
+const createTest = require('./lib/create-test');
+const runTests = require('./lib/run-tests');
 
 class ServerlessJestPlugin {
   constructor(serverless, options) {
@@ -14,7 +14,7 @@ class ServerlessJestPlugin {
       create: {
         commands: {
           test: {
-            usage: 'Create mocha tests for service / function',
+            usage: 'Create jest tests for service / function',
             lifecycleEvents: [
               'test',
             ],
@@ -54,7 +54,7 @@ class ServerlessJestPlugin {
         },
       },
       invoke: {
-        usage: 'Invoke mocha tests for service / function',
+        usage: 'Invoke jest tests for service / function',
         commands: {
           test: {
             usage: 'Invoke test(s)',
@@ -67,11 +67,11 @@ class ServerlessJestPlugin {
                 shortcut: 'f',
               },
               reporter: {
-                usage: 'Mocha reporter to use',
+                usage: 'Jest reporter to use',
                 shortcut: 'R',
               },
               'reporter-options': {
-                usage: 'Options for mocha reporter',
+                usage: 'Options for jest reporter',
                 shortcut: 'O',
               },
               path: {
@@ -102,3 +102,4 @@ class ServerlessJestPlugin {
 }
 
 module.exports = ServerlessJestPlugin;
+module.exports.lambdaWrapper = require('lambda-wrapper');

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "Serverless plugin for test driven development using jest",
   "main": "index.js",
+  "author": "Eetu Tuomala (https://sc5.io)",
   "scripts": {
     "test": "jest --config jest-config.json"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laardee/serverless-jest-plugin.git"
+    "url": "git+https://github.com/sc5/serverless-jest-plugin.git"
   },
   "dependencies": {
     "bluebird": "^3.4.7",
@@ -18,10 +19,13 @@
     "lambda-wrapper": "^0.1.2",
     "yaml-edit": "^0.1.3"
   },
-  "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/laardee/serverless-jest-plugin/issues"
+    "url": "https://github.com/sc5/serverless-jest-plugin/issues"
   },
-  "homepage": "https://github.com/laardee/serverless-jest-plugin#readme"
+  "homepage": "https://github.com/sc5/serverless-jest-plugin#readme",
+  "devDependencies": {
+    "lambda-wrapper": "^0.1.2",
+    "serverless": "^1.5.1"
+  }
 }
