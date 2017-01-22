@@ -1,0 +1,5 @@
+{
+  "rootDir": "__tests__",
+  "testRegex": ".*.test.js",
+  "testEnvironment": "node"
+}
