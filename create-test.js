@@ -18,7 +18,7 @@ const createTest = (serverless, options) => {
 
   const functionItem = serverless.service.functions[functionName];
   const functionPath = path.parse(functionItem.handler);
-  const testFilePath = path.join(functionPath.dir, `${functionPath.name}.test.js`); // @todo regex e.g.*.test.js from config
+  const testFilePath = path.join(functionPath.dir, `${functionName}.test.js`); // @todo regex e.g.*.test.js from config
 
   const testConfig = {
     functionName,
@@ -27,8 +27,6 @@ const createTest = (serverless, options) => {
     testFilePath
   };
 
-  console.log(testConfig);
-
   testfileNotExists(testConfig)
     .then(writeTestfile)
     .catch(console.log);
@@ -36,12 +34,11 @@ const createTest = (serverless, options) => {
 
 const writeTestfile = (testConfig) => {
   const templateFile = path.join(__dirname, testTemplateFile);
-  console.log('write', templateFile);
   const templateString = utils.getTemplateFromFile(templateFile);
   const content = ejs.render(templateString, {
     functionName: testConfig.functionName,
-    functionPath: testConfig.functionPath.dir,
-    handlerName: testConfig.functionPath.base,
+    functionPath: path.join('.', testConfig.functionPath.name),
+    handlerName: testConfig.functionPath.ext.substr(1),
   });
 
   return writeFile(testConfig.testFilePath, content);

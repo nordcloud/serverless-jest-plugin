@@ -98,6 +98,6 @@ const createAWSNodeJSFuncFile = (serverless, handlerPath) => {
 
   serverless.cli.log(`Created function file "${path.join(handlerDir, handlerFile)}"`);
   return BbPromise.resolve();
-}
+};
 
 module.exports = createFunction;

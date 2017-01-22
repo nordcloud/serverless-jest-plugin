@@ -5,11 +5,11 @@
 
 const mod = require('./<%= functionPath %>');
 
-const lambdaWrapper = require('lambda-wrapper);
+const lambdaWrapper = require('lambda-wrapper');
 const wrapped = lambdaWrapper.wrap(mod, { handler: '<%= handlerName %>' });
 
 describe('<%= functionName %>', () => {
-  before((done) => {
+  beforeAll((done) => {
 //  lambdaWrapper.init(liveFunction); // Run the deployed lambda
 
     done();
@@ -17,7 +17,7 @@ describe('<%= functionName %>', () => {
 
   it('implement tests here', () => {
     return wrapped.run({}).then((response) => {
-      expect(response).to.not.be.empty;
+      expect(response).toBeDefined();
     });
   });
 });

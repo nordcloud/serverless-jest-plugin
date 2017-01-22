@@ -2,7 +2,7 @@
 
 const BbPromise = require('bluebird');
 const path = require('path');
-const fs = require('fs');
+const fse = require('fs-extra');
 
 const defaultTestsRootFolder = 'test'; // default test folder used for tests
 
@@ -35,11 +35,11 @@ function getTestFiles(funcs) {
 function createTestFolder(testsRootFolder) {
   return new BbPromise((resolve, reject) => {
     const testsFolder = getTestsFolder(testsRootFolder);
-    fs.exists(testsFolder, (exists) => {
+    fse.exists(testsFolder, (exists) => {
       if (exists) {
         return resolve(testsFolder);
       }
-      fs.mkdir(testsFolder, (err) => {
+      fse.mkdir(testsFolder, (err) => {
         if (err) {
           return reject(err);
         }
@@ -51,7 +51,7 @@ function createTestFolder(testsRootFolder) {
 }
 
 function getTemplateFromFile(templateFilenamePath) {
-  return fs.readFileSync(templateFilenamePath, 'utf-8');
+  return fse.readFileSync(templateFilenamePath, 'utf-8');
 }
 
 function funcNameFromPath(filePath) {
