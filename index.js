@@ -3,6 +3,7 @@
 const BbPromise = require('bluebird');
 
 const createFunction = require('./create-function');
+const createTest = require('./create-test');
 
 class ServerlessJestPlugin {
   constructor(serverless, options) {
@@ -84,7 +85,7 @@ class ServerlessJestPlugin {
     this.hooks = {
       'create:test:test': () => {
         BbPromise.bind(this)
-          .then(this.createTest);
+          .then(() => createTest(this.serverless, this.options));
       },
       'invoke:test:test': () => {
         BbPromise.bind(this)
@@ -93,17 +94,13 @@ class ServerlessJestPlugin {
       'create:function:create': () => {
         BbPromise.bind(this)
           .then(() => createFunction(this.serverless, this.options))
-          .then(this.createTest);
+          .then(() => createTest(this.serverless, this.options));
       },
     };
   }
 
   runTests() {
     console.log('run tests');
-  }
-
-  createTest() {
-    console.log('create test');
   }
 }
 
