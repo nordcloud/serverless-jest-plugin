@@ -79,23 +79,5 @@ sls invoke test [--stage stage] [--region region] [-f function]
 
 If no function names are passed to "invoke test", all tests related to handler functions are run.
 
-### Using own template for a test file
-
-The templates to use for new function Files can be determined with the custom `testTemplate` configuration in `serverless.yml`
-
-```
-custom:
-  serverless-jest-plugin:
-    testTemplate: templates/myTest.js
-```
-
-Currently, there are three variables available for use in the template:
-
-- functionName - name of the function
-- functionPath - path to the function
-- handlerName - the name of the handler function
-
-If you'd like to get more information on the template engine, you check documentation of the [EJS project](http://ejs.co/).
-
 ## License
 https://github.com/SC5/serverless-jest-plugin/blob/master/LICENSE
