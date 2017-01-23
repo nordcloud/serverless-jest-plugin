@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/sc5/serverless-jest-plugin#readme",
   "devDependencies": {
+    "aws-sdk": "^2.7.10",
     "lambda-wrapper": "^0.1.2",
     "serverless": "^1.5.1"
   }
