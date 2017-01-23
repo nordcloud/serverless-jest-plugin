@@ -1,9 +1,9 @@
-# Serverless Jest plugin
+# Serverless Jest Plugin
 
 [![Build Status](https://travis-ci.org/SC5/serverless-jest-plugin.svg?branch=master)](https://travis-ci.org/SC5/serverless-jest-plugin)
 
 A Serverless Plugin for the [Serverless Framework](http://www.serverless.com) which
-adds support for test driven development using [jest](https://facebook.github.io/jest/)
+adds support for test-driven development using [jest](https://facebook.github.io/jest/)
 
 **THIS PLUGIN REQUIRES SERVERLESS V1.0 OR NEWER!**
 
