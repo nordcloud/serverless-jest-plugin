@@ -13,6 +13,7 @@
     "url": "git+https://github.com/sc5/serverless-jest-plugin.git"
   },
   "dependencies": {
+    "aws-sdk": "^2.7.10",
     "bluebird": "^3.4.7",
     "ejs": "^2.5.5",
     "fs-extra": "^2.0.0",
@@ -26,7 +27,6 @@
   },
   "homepage": "https://github.com/sc5/serverless-jest-plugin#readme",
   "devDependencies": {
-    "aws-sdk": "^2.7.10",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-config-airbnb-base": "^11.0.1",
