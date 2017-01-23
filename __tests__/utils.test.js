@@ -44,19 +44,19 @@ describe('utils', () => {
   it('tests default createTestFolder', () =>
     utils.createTestFolder().then((folder) => {
       expect(folder).toBe('test');
-    })
+    }),
   );
 
   it('tests default createTestFolder (exists)', () =>
     utils.createTestFolder().then((folder) => {
       expect(folder).toBe('test');
-    })
+    }),
   );
 
   it('tests custom createTestFolder', () =>
     utils.createTestFolder('custom').then((folder) => {
       expect(folder).toBe('custom');
-    })
+    }),
   );
 
   it('tests funcNameFromPath', () => {

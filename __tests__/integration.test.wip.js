@@ -18,24 +18,23 @@ describe('integration', () => {
     fse.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service'), tmpDir);
     fse.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
-    const packageJson = require(packageJsonPath);
+    const packageJson = fse.readJsonSync(packageJsonPath);
     packageJson.dependencies['serverless-jest-plugin'] = `file:${tmpDir}/.local`;
     fse.writeFileSync(packageJsonPath, JSON.stringify(packageJson));
     process.chdir(tmpDir);
   });
 
   it('should contain test params in cli info', () => {
-    console.log(serverlessExec);
     const test = execSync(serverlessExec);
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain(
-      'create test ................... Create jest tests for service / function'
+      'create test ................... Create jest tests for service / function',
     );
     expect(result).toContain(
-      'create function ............... Create a function into the service'
+      'create function ............... Create a function into the service',
     );
     expect(result).toContain(
-      'invoke test ................... Invoke test(s)'
+      'invoke test ................... Invoke test(s)',
     );
   });
 
@@ -43,17 +42,17 @@ describe('integration', () => {
     const test = execSync(`${serverlessExec} create test --function hello`);
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain(
-      'serverless-jest-plugin: created hello.test.js'
+      'serverless-jest-plugin: created hello.test.js',
     );
   });
 
   it('should create function goodbye', () => {
     const test = execSync(
-      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler`
+      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler`,
     );
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain(
-      'serverless-jest-plugin: created goodbye/goodbye.test.js'
+      'serverless-jest-plugin: created goodbye/goodbye.test.js',
     );
   });
 

@@ -5,7 +5,8 @@
   "main": "index.js",
   "author": "Eetu Tuomala (https://sc5.io)",
   "scripts": {
-    "test": "jest --config jest-config.json"
+    "test": "jest --config jest-config.json",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,12 @@
   "homepage": "https://github.com/sc5/serverless-jest-plugin#readme",
   "devDependencies": {
     "aws-sdk": "^2.7.10",
+    "eslint": "^3.14.0",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
     "lambda-wrapper": "^0.1.2",
     "serverless": "^1.5.1"
   }
