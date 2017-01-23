@@ -28,7 +28,7 @@ Add the plugin to `serverless.yml`:
 
 ```yml
 plugins:
-    - serverless-jest-plugin
+  - serverless-jest-plugin
 ```
 
 ## Usage
