@@ -1,7 +1,7 @@
 {
   "name": "serverless-jest-plugin",
   "version": "0.1.0",
-  "description": "Serverless plugin for test driven development using jest",
+  "description": "Serverless plugin for test driven development using Jest",
   "main": "index.js",
   "author": "Eetu Tuomala (https://sc5.io)",
   "scripts": {
