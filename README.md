@@ -5,9 +5,9 @@
 A Serverless Plugin for the [Serverless Framework](http://www.serverless.com) which
 adds support for test-driven development using [jest](https://facebook.github.io/jest/)
 
-**THIS PLUGIN REQUIRES SERVERLESS V1.0 OR NEWER!**
+**THIS PLUGIN REQUIRES SERVERLESS V1.0 OR LATER!**
 
-More familiar with Mocha? Use [serverless-mocha-plugin](https://github.com/sc5/serverless-mocha-plugin).
+More familiar with Mocha? Try [serverless-mocha-plugin](https://github.com/sc5/serverless-mocha-plugin).
 
 ## Introduction
 
