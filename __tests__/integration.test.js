@@ -40,13 +40,9 @@ describe('integration', () => {
   });
 
   it('should create function goodbye', () => {
-    const test = execSync(
-      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler`
-    );
+    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler`);
     const result = new Buffer(test, 'base64').toString();
-    expect(result).toContain(
-      'Serverless: Created function file goodbye/index.js'
-    );
+    expect(result).toContain('Serverless: Created function file goodbye/index.js');
   });
 
 
@@ -55,13 +51,11 @@ describe('integration', () => {
     testUtils.replaceTextInFile(
       path.join('__tests__', 'hello.test.js'),
       'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')'
-    );
+      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
     testUtils.replaceTextInFile(
       path.join('__tests__', 'goodbye.test.js'),
       'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')'
-    );
+      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
     const test = execSync(`${serverlessExec} invoke test`);
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('');
