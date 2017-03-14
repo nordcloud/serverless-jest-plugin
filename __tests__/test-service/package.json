@@ -5,6 +5,6 @@
     "serverless-jest-plugin": ""
   },
   "devDependencies": {
-    "serverless": "^1.5.1"
+    "serverless": "^1.8.0"
   }
 }

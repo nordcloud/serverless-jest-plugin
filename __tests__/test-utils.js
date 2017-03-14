@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const path = require('path');
 
 const replaceTextInFile = (filePath, subString, newSubString) => {
-  const fileContent = fse.readFileSync(filePath).toString();
+  const fileContent = fse.readFileSync(path.join(process.cwd(), filePath)).toString();
   fse.writeFileSync(filePath, fileContent.replace(subString, newSubString));
 };
 
