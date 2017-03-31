@@ -15,7 +15,7 @@ describe('integration', () => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = testUtils.getTmpDirPath();
     fse.mkdirsSync(tmpDir);
-    fse.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service'), tmpDir);
+    fse.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service6.10'), tmpDir);
     fse.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fse.readJsonSync(packageJsonPath);
