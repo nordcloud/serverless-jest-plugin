@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "application-name-4",
   "version": "0.0.1",
   "dependencies": {
     "serverless-jest-plugin": ""
