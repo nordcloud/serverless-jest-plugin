@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const fse = require('fs-extra');
+const fs = require('fs-extra');
 const utils = require('../lib/utils.js');
 const testUtils = require('../__tests__/test-utils');
 
@@ -9,8 +9,13 @@ describe('utils', () => {
   beforeAll(() => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmp = testUtils.getTmpDirPath();
-    fse.mkdirsSync(tmp);
+    fs.mkdirsSync(tmp);
     process.chdir(tmp);
+  });
+
+  afterAll(() => {
+    // remove temp dir
+    fs.removeSync(process.cwd());
   });
 
   it('tests getTestFilePath for handler', () => {
@@ -36,7 +41,7 @@ describe('utils', () => {
   it('gets template from a file', () => {
     const templatePath =
       path.join(process.env.PLUGIN_TEST_DIR, '../', 'lib', 'templates', 'test-template.ejs');
-    const expectedTemplate = fse.readFileSync(templatePath, 'utf-8');
+    const expectedTemplate = fs.readFileSync(templatePath, 'utf-8');
     const template = utils.getTemplateFromFile(templatePath);
     expect(template).toBe(expectedTemplate);
   });

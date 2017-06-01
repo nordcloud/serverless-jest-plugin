@@ -19,7 +19,7 @@ describe('integration', () => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = getTmpDirPath();
     fs.mkdirsSync(tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service6.10'), tmpDir);
+    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service-options'), tmpDir);
     fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
@@ -47,13 +47,13 @@ describe('integration', () => {
   });
 
   it('should create test for hello function', () => {
-    const test = execSync(`${serverlessExec} create test --function hello`);
+    const test = execSync(`${serverlessExec} create test --function hello --stage prod`);
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created test file __tests__/hello.test.js');
   });
 
   it('should create function goodbye', () => {
-    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler`);
+    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler --stage prod`);
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created function file goodbye/index.js');
   });
@@ -69,6 +69,7 @@ describe('integration', () => {
       path.join('__tests__', 'goodbye.test.js'),
       'require(\'serverless-jest-plugin\')',
       'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
+
     return spawnPromise(serverlessExec, 'invoke test --stage prod')
       .then(({ stderr }) => {
         expect(stderr).toContain('PASS');

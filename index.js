@@ -84,19 +84,16 @@ class ServerlessJestPlugin {
     };
 
     this.hooks = {
-      'create:test:test': () => {
+      'create:test:test': () =>
         BbPromise.bind(this)
-          .then(() => createTest(this.serverless, this.options));
-      },
-      'invoke:test:test': () => {
+          .then(() => createTest(this.serverless, this.options)),
+      'invoke:test:test': () =>
         BbPromise.bind(this)
-          .then(() => runTests(this.serverless, this.options));
-      },
-      'create:function:create': () => {
+          .then(() => runTests(this.serverless, this.options)),
+      'create:function:create': () =>
         BbPromise.bind(this)
           .then(() => createFunction(this.serverless, this.options))
-          .then(() => createTest(this.serverless, this.options));
-      },
+          .then(() => createTest(this.serverless, this.options)),
     };
   }
 }
