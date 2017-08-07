@@ -9,6 +9,8 @@ const runTests = require('./lib/run-tests');
 class ServerlessJestPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
+    this.service = serverless.service || {};
+    this.config = (this.service.custom && this.service.custom.jest) || {};
     this.options = options;
     this.commands = {
       create: {
@@ -89,7 +91,7 @@ class ServerlessJestPlugin {
           .then(() => createTest(this.serverless, this.options)),
       'invoke:test:test': () =>
         BbPromise.bind(this)
-          .then(() => runTests(this.serverless, this.options)),
+          .then(() => runTests(this.serverless, this.options, this.config)),
       'create:function:create': () =>
         BbPromise.bind(this)
           .then(() => createFunction(this.serverless, this.options))
