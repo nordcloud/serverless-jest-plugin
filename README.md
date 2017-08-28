@@ -29,6 +29,12 @@ Add the plugin to `serverless.yml`:
 ```yml
 plugins:
   - serverless-jest-plugin
+custom:
+  jest:
+    # You can pass jest options here
+    # See details here: https://facebook.github.io/jest/docs/configuration.html
+    # For instance, uncomment next line to enable code coverage
+    # collectCoverage: true
 ```
 
 ## Usage
