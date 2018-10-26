@@ -35,7 +35,7 @@ describe('integration', () => {
   });
 
   it('should contain test params in cli info', () => {
-    const test = execSync(serverlessExec);
+    const test = execSync(serverlessExec, { env: process.env });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('create test');
     expect(result).toContain('Create jest tests for service / function');
@@ -47,13 +47,18 @@ describe('integration', () => {
   });
 
   it('should create test for hello function', () => {
-    const test = execSync(`${serverlessExec} create test --function hello --stage prod`);
+    const test = execSync(`${serverlessExec} create test --function hello --stage prod`, {
+      env: process.env,
+    });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created test file __tests__/hello.test.js');
   });
 
   it('should create function goodbye', () => {
-    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler --stage prod`);
+    const test = execSync(
+      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler --stage prod`,
+      { env: process.env },
+    );
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created function file goodbye/index.js');
   });

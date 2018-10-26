@@ -11,23 +11,27 @@ const replaceTextInFile = (filePath, subString, newSubString) => {
   fse.writeFileSync(filePath, fileContent.replace(subString, newSubString));
 };
 
-const getTmpDirPath = () => path.join(os.tmpdir(),
-  'tmpdirs-serverless-jest-plugin',
-  'serverless-jest-plugin',
-  crypto.randomBytes(8).toString('hex'));
+const getTmpDirPath = () =>
+  path.join(
+    os.tmpdir(),
+    'tmpdirs-serverless-jest-plugin',
+    'serverless-jest-plugin',
+    crypto.randomBytes(8).toString('hex'),
+  );
 
-const spawnPromise = (serverlessExec, params) =>
+const spawnPromise = (serverlessExec, params, options = {}) =>
   new Promise((resolve, reject) => {
-    const test = spawn(serverlessExec, params.split(' '));
+    const spawnOptions = Object.assign({ env: process.env }, options);
+    const test = spawn(serverlessExec, params.split(' '), spawnOptions);
     let stdout = '';
     let stderr = '';
 
     test.stdout.on('data', (data) => {
-      stdout += data;
+      stdout += data.toString();
     });
 
     test.stderr.on('data', (data) => {
-      stderr += data;
+      stderr += data.toString();
     });
 
     test.on('close', (code) => {
