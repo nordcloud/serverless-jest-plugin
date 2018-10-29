@@ -4,11 +4,7 @@ const Serverless = require('serverless');
 const execSync = require('child_process').execSync;
 const path = require('path');
 const fs = require('fs-extra');
-const {
-  getTmpDirPath,
-  replaceTextInFile,
-  spawnPromise,
-} = require('./test-utils');
+const { getTmpDirPath, replaceTextInFile, spawnPromise } = require('./test-utils');
 
 const serverless = new Serverless();
 serverless.init();
@@ -19,8 +15,11 @@ describe('integration', () => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = getTmpDirPath();
     fs.mkdirsSync(tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service4.3'), tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
+    const tmpLocalDir = path.join(tmpDir, '.local');
+    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service8.10'), tmpDir);
+    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), tmpLocalDir);
+    // Remove the tests that were copied over to prevent the subprocess from re-running them
+    fs.removeSync(path.join(tmpLocalDir, '__tests__'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
     packageJson.name = `application-${Date.now()}`;
@@ -61,21 +60,25 @@ describe('integration', () => {
     expect(result).toContain('Created function file goodbye/index.js');
   });
 
-
-  it('should run tests successfully', () => {
-    // change test files to use local proxy version of jest plugin
-    replaceTextInFile(
-      path.join('__tests__', 'hello.test.js'),
-      'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
-    replaceTextInFile(
-      path.join('__tests__', 'goodbye.test.js'),
-      'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
-    return spawnPromise(serverlessExec, 'invoke test --stage prod')
-      .then(({ stderr }) => {
+  it(
+    'should run tests successfully',
+    () => {
+      // change test files to use local proxy version of jest plugin
+      replaceTextInFile(
+        path.join('__tests__', 'hello.test.js'),
+        "require('serverless-jest-plugin')",
+        "require('../.serverless_plugins/serverless-jest-plugin/index.js')",
+      );
+      replaceTextInFile(
+        path.join('__tests__', 'goodbye.test.js'),
+        "require('serverless-jest-plugin')",
+        "require('../.serverless_plugins/serverless-jest-plugin/index.js')",
+      );
+      return spawnPromise(serverlessExec, 'invoke test --stage prod').then(({ stderr }) => {
         expect(stderr).toContain('PASS');
         return expect(stderr).toContain('Test Suites: 2 passed, 2 total');
       });
-  }, 120000);
+    },
+    35000,
+  );
 });
