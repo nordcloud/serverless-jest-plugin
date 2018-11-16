@@ -71,6 +71,10 @@ class ServerlessJestPlugin {
                 usage: 'Options for jest reporter',
                 shortcut: 'O',
               },
+              all: {
+                usage: 'Run all discovered Jest tests',
+                shortcut: 'A',
+              },
               path: {
                 usage: 'Path for the tests for running tests in other than default "test" folder',
               },

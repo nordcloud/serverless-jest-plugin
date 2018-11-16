@@ -6,10 +6,12 @@ const path = require('path');
 const Serverless = require('serverless');
 const testUtils = require('./test-utils');
 
+const mockCLICommands = jest.fn();
+
 jest.mock('serverless/lib/classes/CLI', () =>
   jest.fn().mockImplementation((serverless) => {
     const CLI = jest.requireActual('serverless/lib/classes/CLI');
-    return new CLI(serverless, ['invoke', 'test']);
+    return new CLI(serverless, mockCLICommands());
   }),
 );
 
@@ -20,6 +22,8 @@ describe('jest configuration', () => {
 
   beforeEach(() => {
     jest.spyOn(jestConfig, 'readConfig');
+
+    mockCLICommands.mockReturnValue(['invoke', 'test']);
 
     const tmp = testUtils.getTmpDirPath();
     fs.ensureDirSync(tmp);
@@ -233,6 +237,70 @@ describe('jest configuration', () => {
         expect(globalConfig).toMatchObject({
           testRegex: regex,
         });
+      });
+  }, 10000);
+
+  it('can test all test files, not just function-related ones', () => {
+    fs.writeFileSync(
+      'serverless.yml',
+      `
+      service: my-service
+      provider:
+        name: aws
+        runtime: nodejs8.10
+      plugins:
+        - serverless-jest-plugin
+      custom:
+        jest:
+          verbose: true
+          useStderr: true
+      functions:
+        hello:
+          handler: handler.hello
+      `,
+    );
+
+    fs.writeFileSync(
+      '__tests__/utils.test.js',
+      `
+      describe('random test', () => {
+        it('runs the test', () => {
+          expect(true).toBeTruthy();
+        });
+      });
+      `,
+    );
+
+    mockCLICommands.mockReturnValue(['invoke', 'test', '--all']);
+
+    const serverless = new Serverless({ interactive: false });
+
+    expect.hasAssertions();
+
+    return serverless
+      .init()
+      .then(() => {
+        expect(serverless).toHaveProperty('service.custom.jest.verbose', true);
+        expect(serverless).toHaveProperty('service.custom.jest.useStderr', true);
+
+        return serverless.run();
+      })
+      .catch(err => expect(err).toBeUndefined())
+      .then((...serverlessResults) => {
+        const [{ results }] = serverlessResults;
+        expect(jestConfig.readConfig).toHaveBeenCalled();
+
+        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
+
+        expect(globalConfig).toBeDefined();
+        expect(globalConfig).toMatchObject({
+          verbose: true,
+          useStderr: true,
+        });
+
+        expect(results).toBeDefined();
+        expect(results).toHaveProperty('numTotalTestSuites');
+        expect(results.numTotalTestSuites).toBe(2);
       });
   }, 10000);
 });
