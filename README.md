@@ -80,10 +80,12 @@ sls create test -f functionName
 Tests can be run directly using Jest or using the "invoke test" command
 
 ```
-sls invoke test [--stage stage] [--region region] [-f function]
+sls invoke test [--stage stage] [--region region] [-f function] [--all]
 ```
 
 If no function names are passed to "invoke test", all tests related to handler functions are run.
+
+If `--all` or `-A` is passed to "invoke test", all tests are run.
 
 ## License
 https://github.com/SC5/serverless-jest-plugin/blob/master/LICENSE
