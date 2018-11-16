@@ -87,7 +87,7 @@ describe('jest configuration', () => {
     jest.unmock('serverless/lib/classes/CLI');
   });
 
-  it('passes the serverless jest config through to jest', async () => {
+  it('passes the serverless jest config through to jest', () => {
     fs.writeFileSync(
       'serverless.yml',
       `
@@ -111,32 +111,34 @@ describe('jest configuration', () => {
     expect(fs.existsSync('coverage')).toBeFalsy();
 
     const serverless = new Serverless({ interactive: false });
-    await serverless.init();
 
-    expect(serverless).toHaveProperty('service.custom.jest.verbose', false);
-    expect(serverless).toHaveProperty('service.custom.jest.collectCoverage', true);
-    expect(serverless).toHaveProperty('service.custom.jest.useStderr', true);
+    expect.assertions(8);
 
-    try {
-      await serverless.run();
-    } catch (err) {
-      console.error(err);
-    }
+    return serverless
+      .init()
+      .then(() => {
+        expect(serverless).toHaveProperty('service.custom.jest.verbose', false);
+        expect(serverless).toHaveProperty('service.custom.jest.collectCoverage', true);
+        expect(serverless).toHaveProperty('service.custom.jest.useStderr', true);
+        return serverless.run();
+      })
+      .catch(e => expect(e).toBeUndefined())
+      .then(() => {
+        expect(jestConfig.readConfig).toHaveBeenCalled();
 
-    expect(jestConfig.readConfig).toHaveBeenCalled();
+        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
 
-    const [[globalConfig, servicePath], ...rest] = jestConfig.readConfig.mock.calls;
+        expect(globalConfig).toBeDefined();
+        expect(globalConfig).toMatchObject({
+          verbose: false,
+          collectCoverage: true,
+          useStderr: true,
+        });
+        expect(fs.existsSync('coverage')).toBeTruthy();
+      });
+  }, 10000);
 
-    expect(globalConfig).toBeDefined();
-    expect(globalConfig).toMatchObject({
-      verbose: false,
-      collectCoverage: true,
-      useStderr: true,
-    });
-    expect(fs.existsSync('coverage')).toBeTruthy();
-  });
-
-  it('modifies the serverless jest config and verifies the changes', async () => {
+  it('modifies the serverless jest config and verifies the changes', () => {
     fs.writeFileSync(
       'serverless.yml',
       `
@@ -160,28 +162,31 @@ describe('jest configuration', () => {
     expect(fs.existsSync('coverage')).toBeFalsy();
 
     const serverless = new Serverless({ interactive: false });
-    await serverless.init();
 
-    expect(serverless).toHaveProperty('service.custom.jest.verbose', true);
-    expect(serverless).toHaveProperty('service.custom.jest.collectCoverage', false);
-    expect(serverless).toHaveProperty('service.custom.jest.useStderr', true);
+    expect.assertions(8);
 
-    try {
-      await serverless.run();
-    } catch (err) {
-      console.error(err);
-    }
+    return serverless
+      .init()
+      .then(() => {
+        expect(serverless).toHaveProperty('service.custom.jest.verbose', true);
+        expect(serverless).toHaveProperty('service.custom.jest.collectCoverage', false);
+        expect(serverless).toHaveProperty('service.custom.jest.useStderr', true);
 
-    expect(jestConfig.readConfig).toHaveBeenCalled();
+        return serverless.run();
+      })
+      .catch(err => expect(err).toBeUndefined())
+      .then(() => {
+        expect(jestConfig.readConfig).toHaveBeenCalled();
 
-    const [[globalConfig, servicePath], ...rest] = jestConfig.readConfig.mock.calls;
+        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
 
-    expect(globalConfig).toBeDefined();
-    expect(globalConfig).toMatchObject({
-      verbose: true,
-      collectCoverage: false,
-      useStderr: true,
-    });
-    expect(fs.existsSync('coverage')).toBeFalsy();
-  });
+        expect(globalConfig).toBeDefined();
+        expect(globalConfig).toMatchObject({
+          verbose: true,
+          collectCoverage: false,
+          useStderr: true,
+        });
+        expect(fs.existsSync('coverage')).toBeFalsy();
+      });
+  }, 10000);
 });
