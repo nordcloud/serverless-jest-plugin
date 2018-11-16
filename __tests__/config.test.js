@@ -84,6 +84,7 @@ describe('jest configuration', () => {
 
   afterAll(() => {
     process.chdir(process.env.PLUGIN_TEST_DIR);
+    jest.unmock('serverless/lib/classes/CLI');
   });
 
   it('passes the serverless jest config through to jest', async () => {
