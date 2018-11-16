@@ -18,16 +18,12 @@ describe('integration', () => {
   beforeAll(() => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = getTmpDirPath();
-    const tmpLocalDir = path.join(tmpDir, '.local');
     fs.mkdirsSync(tmpDir);
     fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service6.10'), tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), tmpLocalDir);
-    // Remove the tests that were copied over to prevent the subprocess from re-running them
-    fs.removeSync(path.join(tmpLocalDir, '__tests__'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
     packageJson.name = `application-${Date.now()}`;
-    packageJson.dependencies['serverless-jest-plugin'] = `file:${tmpDir}/.local`;
+    packageJson.dependencies['serverless-jest-plugin'] = `file:${process.env.PLUGIN_TEST_DIR}`;
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson));
     process.chdir(tmpDir);
   });
