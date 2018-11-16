@@ -112,7 +112,7 @@ describe('jest configuration', () => {
 
     const serverless = new Serverless({ interactive: false });
 
-    expect.assertions(8);
+    expect.hasAssertions();
 
     return serverless
       .init()
@@ -163,7 +163,7 @@ describe('jest configuration', () => {
 
     const serverless = new Serverless({ interactive: false });
 
-    expect.assertions(8);
+    expect.hasAssertions();
 
     return serverless
       .init()
@@ -187,6 +187,52 @@ describe('jest configuration', () => {
           useStderr: true,
         });
         expect(fs.existsSync('coverage')).toBeFalsy();
+      });
+  }, 10000);
+
+  it('allows testRegex to be changed', () => {
+    const regex = '(/__tests__/.*|(\\.|/)(test|spec))\\.jsx?$';
+
+    fs.writeFileSync(
+      'serverless.yml',
+      `
+      service: my-service
+      provider:
+        name: aws
+        runtime: nodejs8.10
+      plugins:
+        - serverless-jest-plugin
+      custom:
+        jest:
+          useStderr: true
+          testRegex: ${regex}
+      functions:
+        hello:
+          handler: handler.hello
+      `,
+    );
+
+    const serverless = new Serverless({ interactive: false });
+
+    expect.hasAssertions();
+
+    return serverless
+      .init()
+      .then(() => {
+        expect(serverless).toHaveProperty('service.custom.jest.testRegex', regex);
+
+        return serverless.run();
+      })
+      .catch(err => expect(err).toBeUndefined())
+      .then(() => {
+        expect(jestConfig.readConfig).toHaveBeenCalled();
+
+        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
+
+        expect(globalConfig).toBeDefined();
+        expect(globalConfig).toMatchObject({
+          testRegex: regex,
+        });
       });
   }, 10000);
 });
