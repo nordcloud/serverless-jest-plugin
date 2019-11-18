@@ -4,6 +4,7 @@ const Serverless = require('serverless');
 const execSync = require('child_process').execSync;
 const path = require('path');
 const fs = require('fs-extra');
+const stripAnsi = require('strip-ansi');
 const {
   getTmpDirPath,
   replaceTextInFile,
@@ -76,8 +77,9 @@ describe('integration', () => {
 
     return spawnPromise(serverlessExec, 'invoke test --stage prod')
       .then(({ stderr }) => {
-        expect(stderr).toContain('PASS');
-        return expect(stderr).toContain('Test Suites: 2 passed, 2 total');
+        const rawStderr = stripAnsi(stderr);
+        expect(rawStderr).toContain('PASS');
+        return expect(rawStderr).toContain('Test Suites: 2 passed, 2 total');
       });
   }, 120000);
 });

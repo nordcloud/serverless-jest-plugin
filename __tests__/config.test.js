@@ -19,7 +19,7 @@ xdescribe('jest configuration', () => {
   });
 
   beforeEach(() => {
-    jest.spyOn(jestConfig, 'readConfig');
+    jest.spyOn(jestConfig, 'readConfigs');
 
     const tmp = testUtils.getTmpDirPath();
     fs.ensureDirSync(tmp);
@@ -126,9 +126,9 @@ xdescribe('jest configuration', () => {
       })
       .catch(e => expect(e).toBeUndefined())
       .then(() => {
-        expect(jestConfig.readConfig).toHaveBeenCalled();
+        expect(jestConfig.readConfigs).toHaveBeenCalled();
 
-        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
+        const [[globalConfig]] = jestConfig.readConfigs.mock.calls;
 
         expect(globalConfig).toBeDefined();
         expect(globalConfig).toMatchObject({
@@ -180,9 +180,9 @@ xdescribe('jest configuration', () => {
       })
       .catch(err => expect(err).toBeUndefined())
       .then(() => {
-        expect(jestConfig.readConfig).toHaveBeenCalled();
+        expect(jestConfig.readConfigs).toHaveBeenCalled();
 
-        const [[globalConfig]] = jestConfig.readConfig.mock.calls;
+        const [[globalConfig]] = jestConfig.readConfigs.mock.calls;
 
         expect(globalConfig).toBeDefined();
         expect(globalConfig).toMatchObject({
