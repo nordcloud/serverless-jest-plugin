@@ -4,6 +4,7 @@ const Serverless = require('serverless');
 const execSync = require('child_process').execSync;
 const path = require('path');
 const fs = require('fs-extra');
+const stripAnsi = require('strip-ansi');
 const {
   getTmpDirPath,
   replaceTextInFile,
@@ -20,11 +21,10 @@ describe('integration', () => {
     const tmpDir = getTmpDirPath();
     fs.mkdirsSync(tmpDir);
     fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service-options'), tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
     packageJson.name = `application-${Date.now()}`;
-    packageJson.dependencies['serverless-jest-plugin'] = `file:${tmpDir}/.local`;
+    packageJson.dependencies['serverless-jest-plugin'] = `file:${process.env.PLUGIN_TEST_DIR}`;
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson));
     process.chdir(tmpDir);
   });
@@ -35,7 +35,7 @@ describe('integration', () => {
   });
 
   it('should contain test params in cli info', () => {
-    const test = execSync(serverlessExec);
+    const test = execSync(serverlessExec, { env: process.env });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('create test');
     expect(result).toContain('Create jest tests for service / function');
@@ -47,13 +47,18 @@ describe('integration', () => {
   });
 
   it('should create test for hello function', () => {
-    const test = execSync(`${serverlessExec} create test --function hello --stage prod`);
+    const test = execSync(`${serverlessExec} create test --function hello --stage prod`, {
+      env: process.env,
+    });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created test file __tests__/hello.test.js');
   });
 
   it('should create function goodbye', () => {
-    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler --stage prod`);
+    const test = execSync(
+      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler --stage prod`,
+      { env: process.env },
+    );
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created function file goodbye/index.js');
   });
@@ -72,8 +77,9 @@ describe('integration', () => {
 
     return spawnPromise(serverlessExec, 'invoke test --stage prod')
       .then(({ stderr }) => {
-        expect(stderr).toContain('PASS');
-        return expect(stderr).toContain('Test Suites: 2 passed, 2 total');
+        const rawStderr = stripAnsi(stderr);
+        expect(rawStderr).toContain('PASS');
+        return expect(rawStderr).toContain('Test Suites: 2 passed, 2 total');
       });
   }, 120000);
 });

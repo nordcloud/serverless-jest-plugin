@@ -1,6 +1,7 @@
 'use strict';
 
 const BbPromise = require('bluebird');
+const lambdaWrapper = require('lambda-wrapper');
 
 const createFunction = require('./lib/create-function');
 const createTest = require('./lib/create-test');
@@ -17,9 +18,7 @@ class ServerlessJestPlugin {
         commands: {
           test: {
             usage: 'Create jest tests for service / function',
-            lifecycleEvents: [
-              'test',
-            ],
+            lifecycleEvents: ['test'],
             options: {
               function: {
                 usage: 'Name of the function',
@@ -34,9 +33,7 @@ class ServerlessJestPlugin {
           },
           function: {
             usage: 'Create a function into the service',
-            lifecycleEvents: [
-              'create',
-            ],
+            lifecycleEvents: ['create'],
             options: {
               function: {
                 usage: 'Name of the function',
@@ -60,9 +57,7 @@ class ServerlessJestPlugin {
         commands: {
           test: {
             usage: 'Invoke test(s)',
-            lifecycleEvents: [
-              'test',
-            ],
+            lifecycleEvents: ['test'],
             options: {
               function: {
                 usage: 'Name of the function',
@@ -87,8 +82,7 @@ class ServerlessJestPlugin {
 
     this.hooks = {
       'create:test:test': () =>
-        BbPromise.bind(this)
-          .then(() => createTest(this.serverless, this.options)),
+        BbPromise.bind(this).then(() => createTest(this.serverless, this.options)),
       'invoke:test:test': () =>
         BbPromise.bind(this)
           .then(() => runTests(this.serverless, this.options, this.config))
@@ -109,4 +103,17 @@ class ServerlessJestPlugin {
 }
 
 module.exports = ServerlessJestPlugin;
-module.exports.lambdaWrapper = require('lambda-wrapper');
+module.exports.lambdaWrapper = lambdaWrapper;
+
+// Match `serverless-mocha-plugin`
+module.exports.getWrapper = (modName, modPath, handler) => {
+  // TODO: make this fetch the data from serverless.yml
+
+  // eslint-disable-next-line global-require, import/no-dynamic-require
+  const mod = require(process.env.SERVERLESS_TEST_ROOT + modPath);
+
+  const wrapped = lambdaWrapper.wrap(mod, {
+    handler,
+  });
+  return wrapped;
+};

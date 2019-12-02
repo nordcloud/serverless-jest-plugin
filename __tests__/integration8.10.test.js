@@ -4,11 +4,8 @@ const Serverless = require('serverless');
 const execSync = require('child_process').execSync;
 const path = require('path');
 const fs = require('fs-extra');
-const {
-  getTmpDirPath,
-  replaceTextInFile,
-  spawnPromise,
-} = require('./test-utils');
+const stripAnsi = require('strip-ansi');
+const { getTmpDirPath, replaceTextInFile, spawnPromise } = require('./test-utils');
 
 const serverless = new Serverless();
 serverless.init();
@@ -19,12 +16,11 @@ describe('integration', () => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = getTmpDirPath();
     fs.mkdirsSync(tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service6.10'), tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, '..'), path.join(tmpDir, '.local'));
+    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service8.10'), tmpDir);
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
     packageJson.name = `application-${Date.now()}`;
-    packageJson.dependencies['serverless-jest-plugin'] = `file:${tmpDir}/.local`;
+    packageJson.dependencies['serverless-jest-plugin'] = `file:${process.env.PLUGIN_TEST_DIR}`;
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson));
     process.chdir(tmpDir);
   });
@@ -35,7 +31,7 @@ describe('integration', () => {
   });
 
   it('should contain test params in cli info', () => {
-    const test = execSync(serverlessExec);
+    const test = execSync(serverlessExec, { env: process.env });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('create test');
     expect(result).toContain('Create jest tests for service / function');
@@ -47,32 +43,40 @@ describe('integration', () => {
   });
 
   it('should create test for hello function', () => {
-    const test = execSync(`${serverlessExec} create test --function hello`);
+    const test = execSync(`${serverlessExec} create test --function hello`, { env: process.env });
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created test file __tests__/hello.test.js');
   });
 
   it('should create function goodbye', () => {
-    const test = execSync(`${serverlessExec} create function --function goodbye --handler goodbye/index.handler`);
+    const test = execSync(
+      `${serverlessExec} create function --function goodbye --handler goodbye/index.handler`,
+      { env: process.env },
+    );
     const result = new Buffer(test, 'base64').toString();
     expect(result).toContain('Created function file goodbye/index.js');
   });
 
-
-  it('should run tests successfully', () => {
-    // change test files to use local proxy version of jest plugin
-    replaceTextInFile(
-      path.join('__tests__', 'hello.test.js'),
-      'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
-    replaceTextInFile(
-      path.join('__tests__', 'goodbye.test.js'),
-      'require(\'serverless-jest-plugin\')',
-      'require(\'../.serverless_plugins/serverless-jest-plugin/index.js\')');
-    return spawnPromise(serverlessExec, 'invoke test --stage prod')
-      .then(({ stderr }) => {
-        expect(stderr).toContain('PASS');
-        return expect(stderr).toContain('Test Suites: 2 passed, 2 total');
+  it(
+    'should run tests successfully',
+    () => {
+      // change test files to use local proxy version of jest plugin
+      replaceTextInFile(
+        path.join('__tests__', 'hello.test.js'),
+        "require('serverless-jest-plugin')",
+        "require('../.serverless_plugins/serverless-jest-plugin/index.js')",
+      );
+      replaceTextInFile(
+        path.join('__tests__', 'goodbye.test.js'),
+        "require('serverless-jest-plugin')",
+        "require('../.serverless_plugins/serverless-jest-plugin/index.js')",
+      );
+      return spawnPromise(serverlessExec, 'invoke test --stage prod').then(({ stderr }) => {
+        const rawStderr = stripAnsi(stderr);
+        expect(rawStderr).toContain('PASS');
+        return expect(rawStderr).toContain('Test Suites: 2 passed, 2 total');
       });
-  }, 120000);
+    },
+    35000,
+  );
 });
