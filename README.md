@@ -1,13 +1,13 @@
 # Serverless Jest Plugin
 
-[![Build Status](https://travis-ci.org/SC5/serverless-jest-plugin.svg?branch=master)](https://travis-ci.org/SC5/serverless-jest-plugin)
+[![Build Status](https://travis-ci.org/nordcloud/serverless-jest-plugin.svg?branch=master)](https://travis-ci.org/nordcloud/serverless-jest-plugin)
 
 A Serverless Plugin for the [Serverless Framework](http://www.serverless.com) which
 adds support for test-driven development using [jest](https://facebook.github.io/jest/)
 
 **THIS PLUGIN REQUIRES SERVERLESS V1.0 OR LATER!**
 
-More familiar with Mocha? Try [serverless-mocha-plugin](https://github.com/sc5/serverless-mocha-plugin).
+More familiar with Mocha? Try [serverless-mocha-plugin](https://github.com/nordcloud/serverless-mocha-plugin).
 
 ## Introduction
 
@@ -86,4 +86,4 @@ sls invoke test [--stage stage] [--region region] [-f function]
 If no function names are passed to "invoke test", all tests related to handler functions are run.
 
 ## License
-https://github.com/SC5/serverless-jest-plugin/blob/master/LICENSE
+https://github.com/nordcloud/serverless-jest-plugin/blob/master/LICENSE

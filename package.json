@@ -3,14 +3,14 @@
   "version": "0.3.0",
   "description": "Serverless plugin for test driven development using Jest",
   "main": "index.js",
-  "author": "Eetu Tuomala (https://sc5.io)",
+  "author": "Nordcloud (https://nordcloud.com)",
   "scripts": {
     "test": "jest",
     "lint": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sc5/serverless-jest-plugin.git"
+    "url": "git+https://github.com/nordcloud/serverless-jest-plugin.git"
   },
   "dependencies": {
     "bluebird": "^3.5.2",
@@ -22,9 +22,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sc5/serverless-jest-plugin/issues"
+    "url": "https://github.com/nordcloud/serverless-jest-plugin/issues"
   },
-  "homepage": "https://github.com/sc5/serverless-jest-plugin#readme",
+  "homepage": "https://github.com/nordcloud/serverless-jest-plugin#readme",
   "devDependencies": {
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
