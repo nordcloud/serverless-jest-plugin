@@ -1,5 +1,5 @@
 {
-  "name": "serverless-jest-plugin",
+  "name": "@zarconontol/serverless-jest-plugin",
   "version": "0.3.0",
   "description": "Serverless plugin for test driven development using Jest",
   "main": "index.js",
@@ -33,6 +33,16 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
     "serverless": "^1.32.0",
-    "strip-ansi": "chalk/strip-ansi"
-  }
+    "strip-ansi": "github:chalk/strip-ansi"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [
+    "serverless",
+    "serverless-offline",
+    "serverless-jest",
+    "jest",
+    "serverless.yml"
+  ]
 }

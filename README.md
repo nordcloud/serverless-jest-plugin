@@ -1,4 +1,4 @@
-# Serverless Jest Plugin
+# Serverless Jest Plugin - FORKED
 
 [![Build Status](https://travis-ci.org/nordcloud/serverless-jest-plugin.svg?branch=master)](https://travis-ci.org/nordcloud/serverless-jest-plugin)
 
