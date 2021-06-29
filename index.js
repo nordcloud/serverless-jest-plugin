@@ -24,10 +24,12 @@ class ServerlessJestPlugin {
                 usage: 'Name of the function',
                 shortcut: 'f',
                 required: true,
+                type: 'string',
               },
               path: {
                 usage: 'Path for the tests',
                 shortcut: 'p',
+                type: 'string',
               },
             },
           },
@@ -39,14 +41,17 @@ class ServerlessJestPlugin {
                 usage: 'Name of the function',
                 shortcut: 'f',
                 required: true,
+                type: 'string',
               },
               handler: {
                 usage: 'Handler for the function (e.g. --handler my-function/index.handler)',
                 required: true,
+                type: 'string',
               },
               path: {
                 usage: 'Path for the tests (e.g. --path tests)',
                 shortcut: 'p',
+                type: 'string',
               },
             },
           },
@@ -62,17 +67,21 @@ class ServerlessJestPlugin {
               function: {
                 usage: 'Name of the function',
                 shortcut: 'f',
+                type: 'string',
               },
               reporter: {
                 usage: 'Jest reporter to use',
                 shortcut: 'R',
+                type: 'string',
               },
               'reporter-options': {
                 usage: 'Options for jest reporter',
                 shortcut: 'O',
+                type: 'multiple',
               },
               path: {
                 usage: 'Path for the tests for running tests in other than default "test" folder',
+                type: 'string',
               },
             },
           },
