@@ -19,7 +19,7 @@ service: jest-test-suite
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs14.x
   environment:
     STAGE: ${opt:stage}-stage-test
   stage: dev

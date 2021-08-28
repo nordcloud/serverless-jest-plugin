@@ -2,7 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
-const utils = require('../lib/utils.js');
+const utils = require('../lib/utils');
 const testUtils = require('../__tests__/test-utils');
 
 describe('utils', () => {

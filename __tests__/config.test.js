@@ -94,7 +94,7 @@ xdescribe('jest configuration', () => {
       service: my-service
       provider:
         name: aws
-        runtime: nodejs8.10
+        runtime: nodejs14.x
         stage: dev
         region: us-west-1
       plugins:
@@ -147,7 +147,7 @@ xdescribe('jest configuration', () => {
       service: my-service
       provider:
         name: aws
-        runtime: nodejs8.10
+        runtime: nodejs14.x
         stage: dev
         region: us-west-1
       plugins:

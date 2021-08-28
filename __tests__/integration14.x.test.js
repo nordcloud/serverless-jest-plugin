@@ -16,7 +16,7 @@ describe('integration', () => {
     process.env.PLUGIN_TEST_DIR = path.join(__dirname);
     const tmpDir = getTmpDirPath();
     fs.mkdirsSync(tmpDir);
-    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service8.10'), tmpDir);
+    fs.copySync(path.join(process.env.PLUGIN_TEST_DIR, 'test-service14.x'), tmpDir);
     const packageJsonPath = path.join(tmpDir, 'package.json');
     const packageJson = fs.readJsonSync(packageJsonPath);
     packageJson.name = `application-${Date.now()}`;
