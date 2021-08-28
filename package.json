@@ -33,6 +33,6 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
     "serverless": "^1.32.0",
-    "strip-ansi": "chalk/strip-ansi"
+    "strip-ansi": "^6.0.0"
   }
 }
